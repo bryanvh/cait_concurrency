@@ -3,45 +3,41 @@ package com.github.bryanvh.concurrency;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
-import com.github.bryanvh.concurrency.json.LibraryInfo;
 
 public class Library {
-	static public final Map<String, Card> CARDS = load();
-	private static final String CONFIG_ROOT = "/com/github/bryanvh/concurrency/config";
-	private static final String LIB_CONFIG = CONFIG_ROOT + "/library.json";
+	private static final String LIB_CONFIG = "/com/github/bryanvh/concurrency/config/library.json";
 
-	public enum Opponent {
-		LIAM;
-
-		public Player load() throws IOException {
-			InputStream is = Class.class.getResourceAsStream(CONFIG_ROOT + "/"
-					+ name() + ".json");
-			return Player.load(is);
+	static public final Map<String, Card> CARDS;
+	static {
+		Builder builder = null;
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.setAnnotationIntrospector(new JacksonAnnotationIntrospector());
+			InputStream is = Class.class.getResourceAsStream(LIB_CONFIG);
+			builder = mapper.readValue(is, Builder.class);
+		} catch (IOException e) {
+			e.printStackTrace(System.err);
 		}
+		CARDS = builder.map;
 	}
 
-	private static Map<String, Card> load() {
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.setAnnotationIntrospector(new JacksonAnnotationIntrospector());
-
-		InputStream is = null;
-		LibraryInfo li = null;
-		try {
-			is = Class.class.getResourceAsStream(LIB_CONFIG);
-			li = mapper.readValue(is, LibraryInfo.class);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
+	@XmlRootElement()
+	private static class Builder {
 		Map<String, Card> map = new HashMap<String, Card>();
-		for (Card c : li.getList()) {
-			map.put(c.getName(), c);
-		}
 
-		return map;
+		@XmlTransient
+		public void setCards(List<Card> list) {
+			for (Card c : list) {
+				map.put(c.getName(), c);
+			}
+		}
 	}
 }

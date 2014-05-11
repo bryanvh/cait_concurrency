@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.github.bryanvh.concurrency.Library.Opponent;
+import com.github.bryanvh.concurrency.Player.Opponent;
 
 public final class Simulator {
 	private final Player lhs;
@@ -96,7 +96,8 @@ public final class Simulator {
 		return new Simulator(p, opponent, Speed.FAST);
 	}
 
-	public static Simulator createLiesurely(Player p, Opponent o) throws IOException {
+	public static Simulator createLiesurely(Player p, Opponent o)
+			throws IOException {
 		Player opponent = o.load();
 		return new Simulator(p, opponent, Speed.LIESURELY);
 	}
