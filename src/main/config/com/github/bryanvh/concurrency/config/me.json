@@ -1,0 +1,13 @@
+{ "name" : "Bryan",
+  "health" : 100,
+  "hand" : [
+    {"name" : "Leather Chest", "count" : 5},
+    {"name" : "Hardened Leather Chest", "count" : 5},
+    {"name" : "Bronze Shield", "count" : 5},
+    {"name" : "Wooden Spear", "count" : 5},
+    {"name" : "Fire Scroll", "count" : 5},
+    {"name" : "Greater Fire Scroll", "count" : 5},
+    {"name" : "Bane Card", "count" : 10},
+    {"name" : "Aura Card", "count" : 10}
+  ]
+}
