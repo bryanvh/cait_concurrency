@@ -3,19 +3,32 @@ package com.github.bryanvh.concurrency;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
-import com.github.bryanvh.concurrency.json.EffectGroupInfo;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @XmlRootElement()
 public class Condition {
-	private List<Effect> effects;
-	private String name;
-	private int durationStart;
+	private final List<Effect> effects;
+	private final String name;
+	private final int initialDuration;
+
+	@JsonCreator
+	private static Condition createCondition(@JsonProperty("name") String name,
+			@JsonProperty("effects") EffectGroup eg,
+			@JsonProperty("duration") int initialDuration) {
+		return new Condition(name, eg.getEffects(), initialDuration);
+	}
+
+	private Condition(String name, List<Effect> effects, int initialDuration) {
+		this.name = name;
+		this.effects = effects;
+		this.initialDuration = initialDuration;
+	}
 
 	public Effect create() {
 		return new Effect() {
-			private int duration = durationStart;
+			private int duration = initialDuration;
 
 			@Override
 			public void apply(Player actor, Player target) {
@@ -38,21 +51,6 @@ public class Condition {
 				return name + "/" + duration;
 			}
 		};
-	}
-
-	@XmlTransient
-	public void setDuration(int duration) {
-		this.durationStart = duration;
-	}
-
-	@XmlTransient
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	@XmlTransient
-	public void setEffects(EffectGroupInfo effects) {
-		this.effects = effects.getEffects();
 	}
 
 	@Override

@@ -55,9 +55,9 @@ public final class Simulator {
 	}
 
 	public Player run() {
-		int round = 0;
+		// int round = 0;
 		while (true) {
-			round++;
+			// round++;
 			// System.out.println("------" + round + "------");
 
 			lhs.act(rhs);

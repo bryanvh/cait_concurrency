@@ -4,27 +4,31 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
 
+@XmlRootElement()
 public class Player implements Comparable<Player> {
 	private final String name;
+	private final List<Card> hand;
 	private int health;
 	private int armor;
 	private int ward;
 	private int stun;
-	private List<Card> hand;
 	private int next; // index of card in hand to play next
-	private final LinkedList<Effect> conditions;
+	private LinkedList<Effect> conditions;
 
-	private final List<Card> backupHand;
-	private final int backupHealth;
+	private final Set<Card> cardSet;
+	private final int origHealth;
 
 	public enum Opponent {
 		LIAM;
@@ -37,63 +41,39 @@ public class Player implements Comparable<Player> {
 
 	@XmlRootElement()
 	public static class CardGroup {
-		private String name;
-		private int count;
+		private final String name;
+		// TODO: may allow "count" field later
 
-		@XmlTransient
-		public void setName(String name) {
+		@JsonCreator
+		private CardGroup(@JsonProperty("name") String name) {
 			this.name = name;
-		}
-
-		@XmlTransient
-		public void setCount(int count) {
-			this.count = count;
 		}
 	}
 
-	@XmlRootElement()
-	private static class Builder {
-		private String name;
-		private int health;
-		private List<CardGroup> cardGroups;
-
-		@XmlTransient
-		public void setName(String name) {
-			this.name = name;
+	@JsonCreator
+	private static Player createPlayer(@JsonProperty("name") String name,
+			@JsonProperty("health") int health,
+			@JsonProperty("hand") Set<CardGroup> cardGroups) {
+		Set<Card> cardSet = new HashSet<Card>();
+		
+		for (CardGroup cg : cardGroups) {
+			cardSet.add(Library.getCard(cg.name));
 		}
-
-		@XmlTransient
-		public void setHand(List<CardGroup> cardGroups) {
-			this.cardGroups = cardGroups;
-		}
-
-		@XmlTransient
-		public void setHealth(int health) {
-			this.health = health;
-		}
-
-		public static Player load(InputStream is) throws IOException {
-			ObjectMapper mapper = new ObjectMapper();
-			mapper.setAnnotationIntrospector(new JacksonAnnotationIntrospector());
-			Builder builder = mapper.readValue(is, Builder.class);
-
-			List<Card> hand = new ArrayList<Card>();
-			for (CardGroup cg : builder.cardGroups) {
-				Card c = Library.CARDS.get(cg.name);
-				for (int i = 0; i < cg.count; i++) {
-					hand.add(c);
-				}
-			}
-			return new Player(builder.name, builder.health, hand);
-		}
+		
+		return new Player(name, health, cardSet);
 	}
-
-	private Player(String name, int health, List<Card> hand) {
+	
+	private Player(String name, int health, Set<Card> cardSet) {
 		this.name = name;
-		this.backupHand = hand;
-		this.backupHealth = health;
+		this.cardSet = cardSet;
+		this.origHealth = health;
+		this.hand = new ArrayList<Card>();
+		for (Card c : cardSet) {
+			for (int i = 0; i < 5; i++) {
+				hand.add(c);
+			}
+		}
 		reset();
-		this.conditions = new LinkedList<Effect>();
 
 		if (health < 1) {
 			throw new IllegalArgumentException("health must be > 0");
@@ -103,9 +83,26 @@ public class Player implements Comparable<Player> {
 		}
 	}
 
-	public void reset() {
-		this.hand = new ArrayList<Card>(backupHand);
-		this.health = backupHealth;
+	public Player swap(Card currentCard, Card newCard) {
+		Set<Card> newCardSet = new HashSet<Card>(cardSet);
+		newCardSet.remove(currentCard);
+		newCardSet.add(newCard);
+
+		return new Player(name, origHealth, newCardSet);
+	}
+
+	public Set<Card> getCardSet() {
+		return Collections.unmodifiableSet(cardSet);
+	}
+
+	/**
+	 * We could have used the Memento pattern here, but that would have been
+	 * overkill since we only need to restore the Player to its original state
+	 * (not arbitrary states).
+	 */
+	void reset() {
+		this.health = origHealth;
+		this.conditions = new LinkedList<Effect>();
 		this.armor = 0;
 		this.ward = 0;
 		this.stun = 0;
@@ -114,10 +111,13 @@ public class Player implements Comparable<Player> {
 	}
 
 	public static Player load(String path) throws IOException {
-		return Builder.load(Class.class.getResourceAsStream(path));
+		InputStream is = Class.class.getResourceAsStream(path);
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.setAnnotationIntrospector(new JacksonAnnotationIntrospector());
+		return mapper.readValue(is, Player.class);
 	}
 
-	public void act(Player opponent) {
+	void act(Player opponent) {
 		applyConditions(opponent);
 		if (stun > 0) {
 			stun--;
@@ -140,7 +140,7 @@ public class Player implements Comparable<Player> {
 		conditions.removeAll(remove);
 	}
 
-	public boolean isDefeated() {
+	boolean isDefeated() {
 		return health <= 0 || next >= hand.size();
 	}
 
