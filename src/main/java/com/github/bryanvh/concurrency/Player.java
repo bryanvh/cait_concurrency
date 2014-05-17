@@ -33,7 +33,7 @@ public class Player implements Comparable<Player> {
 	public enum Opponent {
 		LIAM;
 
-		public Player load() throws IOException {
+		public Player load() {
 			return Player.load("/com/github/bryanvh/concurrency/config/"
 					+ name() + ".json");
 		}
@@ -42,6 +42,7 @@ public class Player implements Comparable<Player> {
 	@XmlRootElement()
 	public static class CardGroup {
 		private final String name;
+
 		// TODO: may allow "count" field later
 
 		@JsonCreator
@@ -55,14 +56,14 @@ public class Player implements Comparable<Player> {
 			@JsonProperty("health") int health,
 			@JsonProperty("hand") Set<CardGroup> cardGroups) {
 		Set<Card> cardSet = new HashSet<Card>();
-		
+
 		for (CardGroup cg : cardGroups) {
 			cardSet.add(Library.getCard(cg.name));
 		}
-		
+
 		return new Player(name, health, cardSet);
 	}
-	
+
 	private Player(String name, int health, Set<Card> cardSet) {
 		this.name = name;
 		this.cardSet = cardSet;
@@ -83,9 +84,9 @@ public class Player implements Comparable<Player> {
 		}
 	}
 
-	public Player swap(Card currentCard, Card newCard) {
+	public Player swap(Card oldCard, Card newCard) {
 		Set<Card> newCardSet = new HashSet<Card>(cardSet);
-		newCardSet.remove(currentCard);
+		newCardSet.remove(oldCard);
 		newCardSet.add(newCard);
 
 		return new Player(name, origHealth, newCardSet);
@@ -110,11 +111,16 @@ public class Player implements Comparable<Player> {
 		Collections.shuffle(hand);
 	}
 
-	public static Player load(String path) throws IOException {
+	public static Player load(String path) {
 		InputStream is = Class.class.getResourceAsStream(path);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.setAnnotationIntrospector(new JacksonAnnotationIntrospector());
-		return mapper.readValue(is, Player.class);
+		try {
+			return mapper.readValue(is, Player.class);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	void act(Player opponent) {
@@ -129,15 +135,13 @@ public class Player implements Comparable<Player> {
 	}
 
 	private void applyConditions(Player opponent) {
-		List<Effect> remove = new ArrayList<Effect>();
 		for (Effect c : conditions) {
-			// System.out.println(name + " triggering condition " + c);
-			c.apply(this, this);
 			if (c.isExpired()) {
-				remove.add(c);
+				// continue
+			} else {
+				c.apply(this, this);
 			}
 		}
-		conditions.removeAll(remove);
 	}
 
 	boolean isDefeated() {

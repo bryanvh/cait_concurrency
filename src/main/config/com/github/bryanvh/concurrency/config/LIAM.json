@@ -1,15 +1,15 @@
 { "name" : "LIAM",
   "health" : 100,
   "hand" : [
-    {"name" : "Wooden Sword", "count" : 5},
-    {"name" : "Copper Sword", "count" : 5},
-    {"name" : "Bronze Sword", "count" : 5},
-    {"name" : "Wooden Spear", "count" : 5},
-    {"name" : "Copper Spear", "count" : 5},
-    {"name" : "Bronze Spear", "count" : 5},
-    {"name" : "Leather Chest", "count" : 5},
-    {"name" : "Hardened Leather Chest", "count" : 5},
-    {"name" : "Bronze Shield", "count" : 5},
-    {"name" : "Poison Touch", "count" : 5}
+    {"name" : "Wooden Sword"},
+    {"name" : "Copper Sword"},
+    {"name" : "Bronze Sword"},
+    {"name" : "Wooden Spear"},
+    {"name" : "Copper Spear"},
+    {"name" : "Bronze Spear"},
+    {"name" : "Leather Chest"},
+    {"name" : "Hardened Leather Chest"},
+    {"name" : "Bronze Shield"},
+    {"name" : "Poison Touch"}
   ]
 }

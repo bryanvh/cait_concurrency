@@ -40,6 +40,6 @@ public class Card {
 
 	@Override
 	public String toString() {
-		return name + "/" + effects;
+		return name;
 	}
 }

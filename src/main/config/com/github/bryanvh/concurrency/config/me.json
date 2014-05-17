@@ -1,15 +1,15 @@
 { "name" : "Bryan",
   "health" : 100,
   "hand" : [
-    {"name" : "Leather Chest", "count" : 5},
-    {"name" : "Hardened Leather Chest", "count" : 5},
-    {"name" : "Bronze Shield", "count" : 5},
-    {"name" : "Wooden Spear", "count" : 5},
-    {"name" : "Copper Spear", "count" : 5},
-    {"name" : "Bronze Spear", "count" : 5},
-    {"name" : "Fire Scroll", "count" : 5},
-    {"name" : "Greater Fire Scroll", "count" : 5},
-    {"name" : "Burning Touch", "count" : 5},
-    {"name" : "Poison Touch", "count" : 5}
+    {"name" : "Small Glyph"},
+    {"name" : "Greater Glyph"},
+    {"name" : "Pathetic Glyph"},
+    {"name" : "Wooden Spear"},
+    {"name" : "Copper Spear"},
+    {"name" : "Bronze Spear"},
+    {"name" : "Fire Scroll"},
+    {"name" : "Greater Fire Scroll"},
+    {"name" : "Burning Touch"},
+    {"name" : "Poison Touch"}
   ]
 }

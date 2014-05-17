@@ -31,11 +31,8 @@ public class Library {
 		CARDS = builder.map;
 	}
 	
-	public static Set<Card> getUnusedCards(Player p) {
-		Set<Card> oldCards = p.getCardSet();
-		Set<Card> newCards = new HashSet<Card>(CARDS.values());
-		newCards.removeAll(oldCards);
-		return newCards;
+	public static Set<Card> getCards() {
+		return new HashSet<Card>(CARDS.values());
 	}
 	
 	public static Card getCard(String name) {

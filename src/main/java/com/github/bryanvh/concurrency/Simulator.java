@@ -1,60 +1,53 @@
 package com.github.bryanvh.concurrency;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
 import com.github.bryanvh.concurrency.Player.Opponent;
 
 public final class Simulator {
-	private final Player lhs;
 	private final Player rhs;
 	private final Speed speed;
 
 	public enum Speed {
-		SLOW(100), LIESURELY(50), FAST(0);
+		SLOW(50, 0), LIESURELY(25, 0), FAST(0, 0);
 		private final long ms;
+		private final int ns;
 
-		private Speed(long ms) {
+		private Speed(long ms, int ns) {
 			this.ms = ms;
+			this.ns = ns;
 		}
 
-		public void sleep() {
-			if (ms > 0) {
-				try {
-					Thread.sleep(ms);
-				} catch (InterruptedException ignored) {
-				}
+		public void sleep() throws InterruptedException {
+			if (ms > 0 || ns > 0) {
+				Thread.sleep(ms, ns);
 			}
 		}
 	}
 
-	private Simulator(Player lhs, Player rhs, Speed speed) {
-		this.lhs = lhs;
+	private Simulator(Player rhs, Speed speed) {
 		this.rhs = rhs;
 		this.speed = speed;
 	}
 
-	public Map<Player, Integer> run(int n) {
-		Map<Player, Integer> results = new HashMap<Player, Integer>();
-		results.put(lhs, 0);
-		results.put(rhs, 0);
+	public int run(Player lhs, int n) {
+		int lhsWins = 0;
 
-		for (int i = 0; i < n; i++) {
+		try {
 			speed.sleep();
-			lhs.reset();
-			rhs.reset();
-			if (run() == lhs) {
-				results.put(lhs, results.get(lhs) + 1);
-			} else {
-				results.put(rhs, results.get(rhs) + 1);
+			for (int i = 0; i < n; i++) {
+				lhs.reset();
+				rhs.reset();
+				if (run(lhs) == lhs) {
+					lhsWins++;
+				}
 			}
+		} catch (InterruptedException ie) {
+			Thread.currentThread().interrupt();
 		}
 
-		return results;
+		return lhsWins;
 	}
 
-	public Player run() {
+	public Player run(Player lhs) {
 		// int round = 0;
 		while (true) {
 			// round++;
@@ -79,26 +72,16 @@ public final class Simulator {
 			// System.out.println(rhs);
 		}
 	}
-
-	public static Simulator create(Player p, Opponent o, Speed speed)
-			throws IOException {
-		Player opponent = o.load();
-		return new Simulator(p, opponent, speed);
+	
+	public static int run(Player p, Opponent o, int n) {
+		return create(o).run(p, n);
 	}
 
-	public static Simulator createSlow(Player p, Opponent o) throws IOException {
-		Player opponent = o.load();
-		return new Simulator(p, opponent, Speed.SLOW);
+	public static Simulator create(Opponent o) {
+		return create(o, Speed.LIESURELY);
 	}
 
-	public static Simulator createFast(Player p, Opponent o) throws IOException {
-		Player opponent = o.load();
-		return new Simulator(p, opponent, Speed.FAST);
-	}
-
-	public static Simulator createLiesurely(Player p, Opponent o)
-			throws IOException {
-		Player opponent = o.load();
-		return new Simulator(p, opponent, Speed.LIESURELY);
+	public static Simulator create(Opponent o, Speed speed) {
+		return new Simulator(o.load(), speed);
 	}
 }

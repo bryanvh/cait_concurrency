@@ -1,4 +1,9 @@
 { "cards" : [
+    { "name" : "Pathetic Sword", "effects" : { "melee" : 1 } },
+    { "name" : "Pathetic Scroll", "effects" : { "magic" : 1 } },
+    { "name" : "Pathetic Shield", "effects" : { "armor" : 1 } },
+    { "name" : "Pathetic Glyph", "effects" : { "ward" : 1 } },
+    
     { "name" : "Wooden Sword", "effects" : { "melee" : 5 } },
     { "name" : "Copper Sword", "effects" : { "melee" : 9 } },
     { "name" : "Bronze Sword", "effects" : { "melee" : 14 } },
