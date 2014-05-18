@@ -1,20 +1,17 @@
-package com.github.bryanvh.concurrency;
+package edu.wustl.cait.concurrency;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
 
 @XmlRootElement()
 public class Player implements Comparable<Player> {
@@ -34,8 +31,7 @@ public class Player implements Comparable<Player> {
 		LIAM;
 
 		public Player load() {
-			return Player.load("/com/github/bryanvh/concurrency/config/"
-					+ name() + ".json");
+			return Player.load(name() + ".json");
 		}
 	}
 
@@ -54,13 +50,11 @@ public class Player implements Comparable<Player> {
 	@JsonCreator
 	private static Player createPlayer(@JsonProperty("name") String name,
 			@JsonProperty("health") int health,
+			@JsonProperty("isEnemy") boolean isEnemy,
 			@JsonProperty("hand") Set<CardGroup> cardGroups) {
 		Set<Card> cardSet = new HashSet<Card>();
-
-		for (CardGroup cg : cardGroups) {
-			cardSet.add(Library.getCard(cg.name));
-		}
-
+		Library lib = (isEnemy) ? Library.ENEMY_LIB : Library.PLAYER_LIB;
+		cardGroups.forEach(cg -> cardSet.add(lib.getCard(cg.name)));
 		return new Player(name, health, cardSet);
 	}
 
@@ -112,15 +106,7 @@ public class Player implements Comparable<Player> {
 	}
 
 	public static Player load(String path) {
-		InputStream is = Class.class.getResourceAsStream(path);
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.setAnnotationIntrospector(new JacksonAnnotationIntrospector());
-		try {
-			return mapper.readValue(is, Player.class);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
+		return Util.loadFromJson(Player.class, path);
 	}
 
 	void act(Player opponent) {

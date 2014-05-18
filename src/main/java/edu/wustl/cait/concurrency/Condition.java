@@ -1,4 +1,4 @@
-package com.github.bryanvh.concurrency;
+package edu.wustl.cait.concurrency;
 
 import java.util.List;
 

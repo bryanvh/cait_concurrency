@@ -1,16 +1,16 @@
-package com.github.bryanvh.concurrency.labs;
+package edu.wustl.cait.concurrency.labs;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import com.github.bryanvh.concurrency.Card;
-import com.github.bryanvh.concurrency.Library;
-import com.github.bryanvh.concurrency.Player;
-import com.github.bryanvh.concurrency.Player.Opponent;
-import com.github.bryanvh.concurrency.RunnableSwapper;
-import com.github.bryanvh.concurrency.Simulator;
-import com.github.bryanvh.concurrency.SwapResult;
-import com.github.bryanvh.concurrency.Util;
+import edu.wustl.cait.concurrency.Card;
+import edu.wustl.cait.concurrency.Library;
+import edu.wustl.cait.concurrency.Player;
+import edu.wustl.cait.concurrency.RunnableSwapper;
+import edu.wustl.cait.concurrency.Simulator;
+import edu.wustl.cait.concurrency.SwapResult;
+import edu.wustl.cait.concurrency.Util;
+import edu.wustl.cait.concurrency.Player.Opponent;
 
 /**
  * Let's assume we don't want to wait more than 2 seconds to search for a
@@ -58,8 +58,7 @@ public class Lab3 {
 	}
 
 	public static void main(String[] args) throws Exception {
-		Player me = Player
-				.load("/com/github/bryanvh/concurrency/config/me.json");
+		Player me = Player.load("me.json");
 
 		// Step 1: get the base results we can compare to later
 		int base = Simulator.run(me, Opponent.LIAM, EXECUTIONS);

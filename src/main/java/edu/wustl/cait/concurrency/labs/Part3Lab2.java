@@ -1,21 +1,21 @@
-package com.github.bryanvh.concurrency.labs;
+package edu.wustl.cait.concurrency.labs;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import com.github.bryanvh.concurrency.Card;
-import com.github.bryanvh.concurrency.Library;
-import com.github.bryanvh.concurrency.Player;
-import com.github.bryanvh.concurrency.Player.Opponent;
-import com.github.bryanvh.concurrency.Simulator;
-import com.github.bryanvh.concurrency.SwapResult;
-import com.github.bryanvh.concurrency.Util;
+import edu.wustl.cait.concurrency.Card;
+import edu.wustl.cait.concurrency.Library;
+import edu.wustl.cait.concurrency.Player;
+import edu.wustl.cait.concurrency.Simulator;
+import edu.wustl.cait.concurrency.SwapResult;
+import edu.wustl.cait.concurrency.Util;
+import edu.wustl.cait.concurrency.Player.Opponent;
 
 /**
  * The Swapper class demonstrates several forms of unsafe publication.
  */
-public class Part3Lab2_1 {
+public class Part3Lab2 {
 	private static final int EXECUTIONS = 2000;
 
 	private static class Swapper implements Runnable {
@@ -71,8 +71,7 @@ public class Part3Lab2_1 {
 	}
 
 	public static void main(String[] args) throws Exception {
-		Player me = Player
-				.load("/com/github/bryanvh/concurrency/config/me.json");
+		Player me = Player.load("me.json");
 
 		// Step 1: get the base results we can compare to later
 		int base = Simulator.run(me, Opponent.LIAM, EXECUTIONS);
@@ -98,9 +97,6 @@ public class Part3Lab2_1 {
 		long stop = System.currentTimeMillis();
 		System.out.println("duration: " + (stop - start));
 
-		Set<Integer> is = new HashSet<Integer>();
-		Integer m = Util.getMax(Integer::compareTo, is);
-		
 		SwapResult max = Util.getMax(SwapResult::compareTo, s1.getResults(),
 				s2.getResults());
 		System.out.println(max);

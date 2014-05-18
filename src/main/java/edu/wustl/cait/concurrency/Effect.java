@@ -1,4 +1,4 @@
-package com.github.bryanvh.concurrency;
+package edu.wustl.cait.concurrency;
 
 public interface Effect {
 	public void apply(Player actor, Player target);

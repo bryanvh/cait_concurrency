@@ -1,29 +1,19 @@
-package com.github.bryanvh.concurrency.labs;
+package edu.wustl.cait.concurrency.labs;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import com.github.bryanvh.concurrency.Card;
-import com.github.bryanvh.concurrency.Library;
-import com.github.bryanvh.concurrency.Player;
-import com.github.bryanvh.concurrency.Player.Opponent;
-import com.github.bryanvh.concurrency.RunnableSwapper;
-import com.github.bryanvh.concurrency.Simulator;
-import com.github.bryanvh.concurrency.SwapResult;
-import com.github.bryanvh.concurrency.Util;
+import edu.wustl.cait.concurrency.Card;
+import edu.wustl.cait.concurrency.Library;
+import edu.wustl.cait.concurrency.Player;
+import edu.wustl.cait.concurrency.RunnableSwapper;
+import edu.wustl.cait.concurrency.Simulator;
+import edu.wustl.cait.concurrency.SwapResult;
+import edu.wustl.cait.concurrency.Util;
+import edu.wustl.cait.concurrency.Player.Opponent;
 
-/**
- * Let's use a shared counter that only one thread updates. When that thread is
- * done, output the final value of that counter as seen by the writer thread.
- * Then, output the counter value as seen by the other thread that never updates
- * the counter.
- * 
- * This might turn out to be too difficult to reproduce in a dependable manner.
- *
- */
-public class Part3Lab1 {
+public class Lab2 {
 	private static final int EXECUTIONS = 2000;
-	private static boolean STOP = false;
 
 	private static class Swapper extends RunnableSwapper {
 		public Swapper(int base, Player me, Set<Card> oldCards) {
@@ -38,18 +28,8 @@ public class Part3Lab1 {
 
 			// for each new card, try swapping it with each card in hand
 			Simulator sim = Simulator.create(Opponent.LIAM);
-			System.out.println("test cases: "
-					+ (newCards.size() * oldCards.size()));
 			for (Card newCard : newCards) {
 				for (Card oldCard : oldCards) {
-					// CHECK FOR INTERRUPTION
-					if (STOP) {
-						// no cleanup required, just return
-						System.out.println("stopped! "
-								+ Thread.currentThread().getName());
-						return results;
-					}
-
 					Player theNewMe = p.swap(oldCard, newCard);
 					int wins = sim.run(theNewMe, EXECUTIONS);
 					if (wins > base) {
@@ -63,12 +43,11 @@ public class Part3Lab1 {
 	}
 
 	public static void main(String[] args) throws Exception {
-		Player me = Player
-				.load("/com/github/bryanvh/concurrency/config/me.json");
+		Player me = Player.load("me.json");
 
 		// Step 1: get the base results we can compare to later
 		int base = Simulator.run(me, Opponent.LIAM, EXECUTIONS);
-		System.out.println("base: " + base);
+		System.out.println("base: " + base + " / " + EXECUTIONS);
 
 		// Step 2: split the test into 2 halves
 		Set<Card> cardSet1 = new HashSet<Card>();
@@ -78,25 +57,16 @@ public class Part3Lab1 {
 		RunnableSwapper s1 = new Swapper(base, me, cardSet1);
 		RunnableSwapper s2 = new Swapper(base, me, cardSet2);
 
-		Thread t1 = new Thread(s1, "s1");
-		Thread t2 = new Thread(s2, "s2");
+		Thread t1 = new Thread(s1);
+		Thread t2 = new Thread(s2);
 
 		long start = System.currentTimeMillis();
 		t1.start();
 		t2.start();
-
-		// t1.join(); // establish happens-before
-		// t2.join(); // establish happens-before
-		Thread.sleep(1000);
-		// s1.stop();
-		// s2.stop();
-		STOP = true;
-
-		System.out.println("duration: " + (System.currentTimeMillis() - start));
-
 		t1.join(); // establish happens-before
 		t2.join(); // establish happens-before
-		System.out.println("duration: " + (System.currentTimeMillis() - start));
+		long stop = System.currentTimeMillis();
+		System.out.println("duration: " + (stop - start));
 
 		SwapResult max = Util.getMax(SwapResult::compareTo, s1.getResults(),
 				s2.getResults());

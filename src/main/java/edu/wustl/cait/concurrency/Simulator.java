@@ -1,6 +1,6 @@
-package com.github.bryanvh.concurrency;
+package edu.wustl.cait.concurrency;
 
-import com.github.bryanvh.concurrency.Player.Opponent;
+import edu.wustl.cait.concurrency.Player.Opponent;
 
 public final class Simulator {
 	private final Player rhs;

@@ -1,0 +1,38 @@
+{ "cards" : [
+    { "name" : "Pathetic Sword", "effects" : { "melee" : 1 } },
+    { "name" : "Pathetic Scroll", "effects" : { "magic" : 1 } },
+    { "name" : "Pathetic Shield", "effects" : { "armor" : 1 } },
+    { "name" : "Pathetic Glyph", "effects" : { "ward" : 1 } },
+    
+    { "name" : "Wooden Sword", "effects" : { "melee" : 5 } },
+    { "name" : "Copper Sword", "effects" : { "melee" : 9 } },
+    { "name" : "Bronze Sword", "effects" : { "melee" : 14 } },
+    
+    { "name" : "Fire Scroll", "effects" : { "magic" : 5 } },
+    { "name" : "Greater Fire Scroll", "effects" : { "magic" : 9 } },
+    { "name" : "Burning Touch", "effects" : { "magic" : 14 } },
+    
+    { "name" : "Wooden Spear", "effects" : { "melee" : 4, "armor" : 1 } },
+    { "name" : "Copper Spear", "effects" : { "melee" : 8, "armor" : 2 } },
+    { "name" : "Bronze Spear", "effects" : { "melee" : 12, "armor" : 4 } },
+    
+    { "name" : "Earth Scroll", "effects" : { "melee" : 2, "magic" : 8 } },
+    { "name" : "Greater Earth Scroll", "effects" : { "melee" : 4, "magic" : 12 } },
+    { "name" : "Poison Touch", "effects" : { "melee" : 6, "magic" : 19 } },
+    
+    { "name" : "Holy Scroll", "effects" : { "magic" : 5, "ward" : 3 } },
+    { "name" : "Greater Holy Scroll", "effects" : { "magic" : 9, "ward" : 4 } },
+    { "name" : "Cleansing Touch", "effects" : { "magic" : 13, "ward" : 7 } },
+    
+    { "name" : "Leather Chest", "effects" : { "armor" : 8 } },
+    { "name" : "Hardened Leather Chest", "effects" : { "armor" : 14 } },
+    { "name" : "Bronze Shield", "effects" : { "armor" : 23 } },
+    
+    { "name" : "Small Glyph", "effects" : { "ward" : 8 } },
+    { "name" : "Greater Glyph", "effects" : { "ward" : 14 } },
+    { "name" : "Warden Stone", "effects" : { "ward" : 23 } },
+    
+    { "name" : "Bane Card", "effects" : { "bane" : { "name" : "Swipe", "duration" : 3, "effects" : { "melee" : 5 } } } },
+    { "name" : "Aura Card", "effects" : { "aura" : { "name" : "Relax", "duration" : 3, "effects" : { "ward" : 5 } } } }
+  ]
+}

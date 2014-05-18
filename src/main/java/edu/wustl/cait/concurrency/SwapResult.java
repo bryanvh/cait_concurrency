@@ -1,4 +1,4 @@
-package com.github.bryanvh.concurrency;
+package edu.wustl.cait.concurrency;
 
 public class SwapResult implements Comparable<SwapResult> {
 	private final Card left;

@@ -1,15 +1,15 @@
-package com.github.bryanvh.concurrency.labs;
+package edu.wustl.cait.concurrency.labs;
 
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.github.bryanvh.concurrency.Card;
-import com.github.bryanvh.concurrency.Library;
-import com.github.bryanvh.concurrency.Player;
-import com.github.bryanvh.concurrency.Player.Opponent;
-import com.github.bryanvh.concurrency.Simulator;
-import com.github.bryanvh.concurrency.SwapResult;
+import edu.wustl.cait.concurrency.Card;
+import edu.wustl.cait.concurrency.Library;
+import edu.wustl.cait.concurrency.Player;
+import edu.wustl.cait.concurrency.Simulator;
+import edu.wustl.cait.concurrency.SwapResult;
+import edu.wustl.cait.concurrency.Player.Opponent;
 
 public class Lab1 {
 	private static final int EXECUTIONS = 2000;
@@ -23,13 +23,12 @@ public class Lab1 {
 		// 4. Library.getCards()
 		// 5. Player.swap()
 
-		Player me = Player
-				.load("/com/github/bryanvh/concurrency/config/me.json");
+		Player me = Player.load("me_p2e1.json");
 
 		// Step 1: get the base results we can compare to later
 		Simulator sim = Simulator.create(Opponent.LIAM);
 		int base = sim.run(me, EXECUTIONS);
-		System.out.println("base: " + base);
+		System.out.println("base: " + base + " / " + EXECUTIONS);
 
 		// Step 2: figure out the set of cards we can test
 		Set<Card> oldCards = me.getCardSet();
@@ -39,7 +38,7 @@ public class Lab1 {
 		Set<SwapResult> goodSwaps = new HashSet<SwapResult>();
 
 		long start = System.currentTimeMillis();
-		
+
 		// Step 3: for each new card, try swapping it with each card in hand
 		for (Card newCard : newCards) {
 			for (Card oldCard : oldCards) {
@@ -50,11 +49,9 @@ public class Lab1 {
 				}
 			}
 		}
-		
+
 		long stop = System.currentTimeMillis();
 		System.out.println("duration: " + (stop - start));
-		
-		// TODO: make it more likely the same swap is always best
 		System.out.println(Collections.max(goodSwaps));
 	}
 
