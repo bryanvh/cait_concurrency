@@ -11,7 +11,7 @@ import edu.wustl.cait.concurrency.Simulator;
 import edu.wustl.cait.concurrency.SwapResult;
 import edu.wustl.cait.concurrency.Player.Opponent;
 
-public class Lab1 {
+public class Part2Lab1 {
 	private static final int EXECUTIONS = 2000;
 
 	public static void main(String[] args) throws Exception {

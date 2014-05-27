@@ -18,7 +18,16 @@ public final class Simulator {
 
 		public void sleep() throws InterruptedException {
 			if (ms > 0 || ns > 0) {
-				Thread.sleep(ms, ns);
+				try {
+					// pretend to wait for I/O
+					Thread.sleep(ms, ns);
+				} catch (InterruptedException ie) {
+					// since we are supposed to be "working" not sleeping (which
+					// has been interrupted), try sleeping again, then rethrow
+					// the exception
+					Thread.sleep(ms, ns);
+					throw ie;
+				}
 			}
 		}
 	}
@@ -72,7 +81,7 @@ public final class Simulator {
 			// System.out.println(rhs);
 		}
 	}
-	
+
 	public static int run(Player p, Opponent o, int n) {
 		return create(o).run(p, n);
 	}

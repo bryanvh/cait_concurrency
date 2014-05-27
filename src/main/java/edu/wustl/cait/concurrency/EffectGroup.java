@@ -40,6 +40,11 @@ public class EffectGroup {
 	}
 
 	@XmlTransient
+	public void setHeal(int i) {
+		effects.add(Effect.createHeal(i));
+	}
+
+	@XmlTransient
 	public void setBane(Condition c) {
 		effects.add(Effect.createBane(c));
 	}

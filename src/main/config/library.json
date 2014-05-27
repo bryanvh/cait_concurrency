@@ -33,6 +33,17 @@
     { "name" : "Warden Stone", "effects" : { "ward" : 23 } },
     
     { "name" : "Bane Card", "effects" : { "bane" : { "name" : "Swipe", "duration" : 3, "effects" : { "melee" : 5 } } } },
-    { "name" : "Aura Card", "effects" : { "aura" : { "name" : "Relax", "duration" : 3, "effects" : { "ward" : 5 } } } }
+    { "name" : "Aura Card", "effects" : { "aura" : { "name" : "Relax", "duration" : 3, "effects" : { "ward" : 5 } } } },
+    
+    { "name" : "Minor Blind", "effects" : { "stun" : 1 } },
+    { "name" : "Blind", "effects" : { "stun" : 2 } },
+    
+    { "name" : "Minor Refresh", "effects" : { "heal" : 5 } }, 
+    { "name" : "Refresh", "effects" : { "heal" : 10 } },
+    
+    { "name" : "Kitchen Sink 1", "effects" : { "ward" : 1, "armor" : 1, "melee" : 1, "magic" : 1, "heal" : 1, "stun" : 1 } },
+    { "name" : "Kitchen Sink 2", "effects" : { "ward" : 2, "armor" : 2, "melee" : 2, "magic" : 2, "heal" : 2, "stun" : 1 } },
+    { "name" : "Kitchen Sink 3", "effects" : { "ward" : 3, "armor" : 3, "melee" : 3, "magic" : 3, "heal" : 3, "stun" : 1 } }
+    
   ]
 }

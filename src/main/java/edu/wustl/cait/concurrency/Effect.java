@@ -8,97 +8,34 @@ public interface Effect {
 	}
 
 	public static Effect createBane(final Condition cf) {
-		return new Effect() {
-			@Override
-			public void apply(Player actor, Player target) {
-				// banes apply to the target
-				target.addCondition(cf.create());
-			}
-
-			@Override
-			public String toString() {
-				return "bane:" + cf.toString();
-			}
-		};
+		return (actor, target) -> target.addCondition(cf.create());
 	}
 
 	public static Effect createAura(final Condition cf) {
-		return new Effect() {
-			@Override
-			public void apply(Player actor, Player target) {
-				// auras apply to the actor
-				actor.addCondition(cf.create());
-			}
-
-			@Override
-			public String toString() {
-				return "aura:" + cf.toString();
-			}
-		};
+		return (actor, target) -> actor.addCondition(cf.create());
 	}
 
 	public static Effect createMelee(final int i) {
-		return new Effect() {
-			@Override
-			public void apply(Player actor, Player target) {
-				target.applyMelee(i);
-			}
-
-			@Override
-			public String toString() {
-				return "melee/" + i;
-			}
-		};
+		return (actor, target) -> target.applyMelee(i);
 	}
 
 	public static Effect createMagic(final int i) {
-		return new Effect() {
-			@Override
-			public void apply(Player actor, Player target) {
-				target.applyMagic(i);
-			}
-
-			@Override
-			public String toString() {
-				return "magic/" + i;
-			}
-		};
+		return (actor, target) -> target.applyMagic(i);
 	}
 
 	public static Effect createArmor(final int i) {
-		return new Effect() {
-			@Override
-			public void apply(Player actor, Player target) {
-				actor.applyArmor(i);
-			}
-
-			@Override
-			public String toString() {
-				return "armor/" + i;
-			}
-		};
+		return (actor, target) -> actor.applyArmor(i);
 	}
 
 	public static Effect createWard(final int i) {
-		return new Effect() {
-			@Override
-			public void apply(Player actor, Player target) {
-				actor.applyWard(i);
-			}
-
-			@Override
-			public String toString() {
-				return "ward/" + i;
-			}
-		};
+		return (actor, target) -> actor.applyWard(i);
 	}
 
 	public static Effect createStun(final int i) {
-		return new Effect() {
-			@Override
-			public void apply(Player actor, Player target) {
-				target.applyStun(i);
-			}
-		};
+		return (actor, target) -> target.applyStun(i);
+	}
+
+	public static Effect createHeal(final int i) {
+		return (actor, target) -> actor.applyHeal(i);
 	}
 }

@@ -3,6 +3,7 @@ package edu.wustl.cait.concurrency;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -27,13 +28,44 @@ public interface Util {
 		return stream.flatMap(a -> a.stream()).max(c).orElse(null);
 	}
 
-	public static <T> void register(T t) {
-		// do nothing, just for illustration
+	public static interface Registerable {
+		public Set<SwapResult> getResults();
 	}
 
-	public static <T> int tabulate(T t) {
-		// do nothing useful, just for illustration
-		return 0;
+	public final static Set<Registerable> REGISTERED = new HashSet<>();
+
+	public static void register(Registerable r) {
+		if (r.getResults() == null) {
+			System.err.println("Unsafe publication!");
+		}
+		REGISTERED.add(r);
+	}
+
+	public static void verifySafePublication(Class<? extends Registerable> c) {
+		
+		if (REGISTERED.size() != 2) {
+			System.err.println("error: must register 2 Registerables!");
+			return;
+		}
+		if (c.getConstructors().length != 0) {
+			System.err.println("error: no public constructors allowed!");
+			return;
+		}
+		if (c.getFields().length > 0) {
+			System.err.println("error: no public fields allowed!");
+			return;
+		}
+		for (Registerable as : REGISTERED) {
+			Set<SwapResult> set = as.getResults();
+			try {
+				set.clear();
+			} catch (UnsupportedOperationException uoe) {
+				continue;
+			}
+			System.err.println("error: unsafe publication from getResults()!");
+		}
+
+		System.out.println("Congratulations on safe publication!");
 	}
 
 	public static final String CONFIG_ROOT = "/META-INF/config/";

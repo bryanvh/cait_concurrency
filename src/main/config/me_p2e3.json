@@ -1,0 +1,15 @@
+{ "name" : "Bryan",
+  "health" : 100,
+  "hand" : [
+    {"name" : "Small Glyph"},
+    {"name" : "Greater Glyph"},
+    {"name" : "Pathetic Glyph"},
+    {"name" : "Wooden Spear"},
+    {"name" : "Copper Spear"},
+    {"name" : "Bronze Spear"},
+    {"name" : "Fire Scroll"},
+    {"name" : "Greater Fire Scroll"},
+    {"name" : "Burning Touch"},
+    {"name" : "Poison Touch"}
+  ]
+}

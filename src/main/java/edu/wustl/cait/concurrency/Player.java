@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Consumer;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -180,6 +179,10 @@ public class Player implements Comparable<Player> {
 
 	void applyStun(int value) {
 		stun += value;
+	}
+
+	void applyHeal(int value) {
+		health = Math.min(origHealth, health + value);
 	}
 
 	public String getName() {
