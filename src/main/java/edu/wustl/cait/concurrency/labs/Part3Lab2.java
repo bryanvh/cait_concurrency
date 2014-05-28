@@ -1,7 +1,7 @@
 package edu.wustl.cait.concurrency.labs;
 
 /**
- * Stale read; cannot be solved using a volatile.
+ * Lost updates; cannot be solved using a volatile.
  *
  */
 public class Part3Lab2 {

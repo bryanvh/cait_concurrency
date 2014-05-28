@@ -6,6 +6,7 @@ package edu.wustl.cait.concurrency.labs;
  */
 public class Part3Lab4 {
 
+	// mutator is synchronized, but corresponding getter is not
 	public static class Counter {
 		private long value = 0;
 

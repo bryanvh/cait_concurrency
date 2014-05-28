@@ -83,7 +83,7 @@ public class SimulationTask extends RecursiveTask<SimulationResult> {
 
 	public static final Set<String> library = new HashSet<>();
 	static {
-		fill(library, 15);
+		fill(library, 20);
 		System.out.println("Library: " + library);
 	}
 

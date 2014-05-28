@@ -15,11 +15,9 @@ public class Library {
 	private final Map<String, Card> cards;
 
 	static {
-		Builder builder;
-		builder = Util.loadFromJson(Builder.class, "library.json");
-		PLAYER_LIB = new Library(builder.map);
-		builder = Util.loadFromJson(Builder.class, "library_enemy.json");
-		ENEMY_LIB = new Library(builder.map);
+		PLAYER_LIB = Util.loadFromJson(Builder.class, "library.json").build();
+		ENEMY_LIB = Util.loadFromJson(Builder.class, "library_enemy.json")
+				.build();
 	}
 
 	private Library(Map<String, Card> cards) {
@@ -43,11 +41,15 @@ public class Library {
 
 	@XmlRootElement()
 	private static class Builder {
-		Map<String, Card> map = new HashMap<String, Card>();
+		private Map<String, Card> map = new HashMap<String, Card>();
 
 		@XmlTransient
 		public void setCards(List<Card> list) {
 			list.forEach(c -> map.put(c.getName(), c));
+		}
+
+		public Library build() {
+			return new Library(map);
 		}
 	}
 }

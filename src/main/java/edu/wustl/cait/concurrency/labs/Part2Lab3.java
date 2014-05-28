@@ -6,11 +6,10 @@ import java.util.Set;
 import edu.wustl.cait.concurrency.Card;
 import edu.wustl.cait.concurrency.Library;
 import edu.wustl.cait.concurrency.Player;
-import edu.wustl.cait.concurrency.RunnableSwapper;
+import edu.wustl.cait.concurrency.Player.Opponent;
 import edu.wustl.cait.concurrency.Simulator;
 import edu.wustl.cait.concurrency.SwapResult;
 import edu.wustl.cait.concurrency.Util;
-import edu.wustl.cait.concurrency.Player.Opponent;
 
 /**
  * Let's assume we don't want to wait more than 2 seconds to search for a

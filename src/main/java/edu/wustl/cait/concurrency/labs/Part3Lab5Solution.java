@@ -28,6 +28,7 @@ public class Part3Lab5Solution {
 					newHand.add(c);
 				}
 			}
+			Collections.shuffle(newHand);
 			this.hand = newHand;
 		}
 

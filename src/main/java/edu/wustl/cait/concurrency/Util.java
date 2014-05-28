@@ -2,6 +2,7 @@ package edu.wustl.cait.concurrency;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.invoke.MethodHandles;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
@@ -42,7 +43,7 @@ public interface Util {
 	}
 
 	public static void verifySafePublication(Class<? extends Registerable> c) {
-		
+
 		if (REGISTERED.size() != 2) {
 			System.err.println("error: must register 2 Registerables!");
 			return;
@@ -71,7 +72,8 @@ public interface Util {
 	public static final String CONFIG_ROOT = "/META-INF/config/";
 
 	public static <T> T loadFromJson(Class<T> type, String path) {
-		InputStream is = Util.class.getResourceAsStream(CONFIG_ROOT + path);
+		InputStream is = MethodHandles.lookup().lookupClass()
+				.getResourceAsStream(CONFIG_ROOT + path);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.setAnnotationIntrospector(new JacksonAnnotationIntrospector());
 		T result = null;
